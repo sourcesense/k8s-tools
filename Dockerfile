@@ -7,6 +7,7 @@ RUN mkdir /data \
   && curl -L https://get.helm.sh/$(curl -L -s https://api.github.com/repos/helm/helm/releases/latest | grep -o -E "https://(.*)helm-(.*)-linux-amd64.tar.gz"|head -1|rev|cut -d \/ -f 1|rev) -o /tmp/helm.tgz \
   && curl -L $(curl -L -s https://api.github.com/repos/derailed/k9s/releases/latest | grep -o -E "https://(.*)k9s_Linux_x86_64.tar.gz"|head -1) -o /tmp/k9s.tgz \
   && curl -L $(curl -L -s https://api.github.com/repos/direnv/direnv/releases/latest | grep -o -E "https://(.*)direnv.linux-amd64"|head -1) -o /tmp/direnv \
+  && curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/data/awscliv2.zip" \
   && echo -e "#!/bin/bash\n" > /copy.sh \
   && echo -e "tar xzf /tmp/flux.tgz -C /data\n" >> /copy.sh \
   && echo -e "tar xvf /tmp/helm.tgz linux-amd64/helm --strip-components 1 -C /data > /dev/null\n" >> /copy.sh \
