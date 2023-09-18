@@ -1,0 +1,15 @@
+FROM alpine:3.18.3
+
+RUN mkdir /data \
+  && apk --no-cache add --update ca-certificates \
+  && apk --no-cache add --update -t deps vim curl bash \
+  && curl "https://download-installer.cdn.mozilla.net/pub/firefox/releases/117.0.1/win64/it/Firefox%20Setup%20117.0.1.exe" -o "/tmp/ffs.exe" \
+  && curl "https://netix.dl.sourceforge.net/project/portableapps/Mozilla%20Firefox%2C%20Portable%20Ed./Mozilla%20Firefox%2C%20Portable%20Edition%20117.0.1/FirefoxPortable_117.0.1_Italian.paf.exe" -o "/tmp/ffp.exe" \
+  && echo -e "#!/bin/bash\n" > /copy.sh \
+  && echo -e "cp /tmp/ffs.exe /data\n" >> /copy.sh \
+  && echo -e "cp /tmp/ffp.exe /data\n" >> /copy.sh \
+  && echo -e "chmod +x /data/*\n" >> /copy.sh \
+  && echo -e "echo \"run as 'docker run --rm -v \\\$(pwd):/data ghcr.io/ecomind/k8s-tools' to extract tools in current dir\"" >> /copy.sh \
+  && chmod +x /copy.sh
+
+ENTRYPOINT [ "/copy.sh" ]
